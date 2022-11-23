@@ -1,21 +1,17 @@
 #!/bin/sh
 
-# cd "Labs/Lab1/63011208"
-
 LAB_NAME=$1 # Lab11
 CORRECT_ANS=$2 # 20
 LAB_X=${LAB_NAME:0:4} # Lab1
-QUESTOIN_Y=${LAB_NAME:4} # 1
 
 cd "Labs/$LAB_X"
 
+# delete it if result$LAB_NAME.txt existed
 if [ -f "result$LAB_NAME.txt" ]; then
-    # echo "Record file existed"
     rm "result$LAB_NAME.txt" # or delete file
 fi
 
 id=0
-# while [ $id -le 999 ]; do
 for id in {0..999}; do # last 3 digits of ID number
 
     # set Full ID
@@ -32,13 +28,11 @@ for id in {0..999}; do # last 3 digits of ID number
         echo "$FULL_ID Existed"
         cd "$FULL_ID"
         if [ -f "$LAB_NAME.c" ]; then # check file existed
-            # check file existed, not needed
             gcc -o answer "$LAB_NAME.c" 2>/dev/null
-            if [ "$?" -eq "0" ]; then
-                # check answer and calculate the score
+            if [ "$?" -eq "0" ]; then # check the compilation error before run the executable file
                 MY_ANS="$(./answer)" # put the o/p into var
                 echo "$FULL_ID's answer is $MY_ANS"
-
+                # check answer and calculate the score
                 if (($MY_ANS == $CORRECT_ANS)); then
                     SCORE="$FULL_ID;3"
                 elif (($MY_ANS != $CORRECT_ANS)); then

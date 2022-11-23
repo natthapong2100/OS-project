@@ -11,8 +11,8 @@ SUM_POINTS=0 # accumulate sum
 LAB_NAME=$1 # Lab1
 
 cd "Labs/$LAB_NAME"
-# filename="resultLab11.txt" # this line for stat for each lab question
 
+# delete file if $LAB_NAME-$FULL_ID.txt already exists
 for id in {0..999}; do
 
     # set Full ID
@@ -36,6 +36,11 @@ if [ -f "$LAB_NAME-totalscore.txt" ]; then
     rm "$LAB_NAME-totalscore.txt"
 fi
 
+if [ -f "$LAB_NAME-mathstat.txt" ]; then
+    rm "$LAB_NAME-mathstat.txt"
+fi
+
+# categorize the file by in one file have every lab question score
 for num in {1..9}; do
     filename="result$LAB_NAME$num.txt"
     
@@ -50,7 +55,7 @@ for num in {1..9}; do
 
 done
 
-
+# sum into total score and write to a file
 for id in {0..999}; do
 
     # set Full ID
@@ -72,13 +77,10 @@ for id in {0..999}; do
 
         echo "$FULL_ID;$SCORE" >> "$LAB_NAME-totalscore.txt"
     fi
-
-
 done
 
-filename="$LAB_NAME-totalscore.txt"
+filename="$LAB_NAME-totalscore.txt" # change filename
 
-# ******* calculate entire of this for ALL result (Lab1), so file name = 1 file recently
 # calculate MIN, MAX, accumulate sum
 while read line; do # reading line by line
     n=$((n+1))
@@ -96,37 +98,27 @@ while read line; do # reading line by line
 
 done < $filename
 
-
 echo "MAX: $MAX, MIN: $MIN"
+echo "MAX: $MAX, MIN: $MIN" >> "$LAB_NAME-mathstat.txt"
 
-AVERAGE=$(echo "$SUM_POINTS / $n" | bc) # x bar
-echo "Average: $AVERAGE" 
+AVERAGE=$(echo "scale=6; $SUM_POINTS / $n" | bc) # x bar
+echo "Average: $AVERAGE"
+echo "Average: $AVERAGE" >> "$LAB_NAME-mathstat.txt"
+
 
 # calculate S.D.
+TEMP=0
 while read line; do
     POINTS=${line:9} # the point is in index 9th
-    # TEMP=$(( TEMP + ((POINTS - AVERAGE)**2) ))
-    echo "Point: $POINTS"
-
-    # A=$(echo "$POINTS + $AVERAGE" | bc)
-    TEMP=$(( TEMP + ($POINTS - $AVERAGE)**2 ))  # work! 
-    
-    # A=$(( ($POINTS - ($SUM_POINTS / $n) )**2 ))
-    # TEMP=$((TEMP + A))
-
-    # TEMP=$(echo "scale=3; $TEMP + $A" | bc)
-    # AVERAGE=1
-
-    # TEMP=$(echo "$TEMP + (($POINTS - $AVERAGE)^2)" | bc)
-    # TEMP=$(echo "scale=6; $POINTS + 1000 )" | bc)
-
-    # TEMP=$( echo "TEMP + 500.33333333" | bc)
+    TEMP_POWER=$(echo "scale=6; (($POINTS - $AVERAGE)^2)" | bc)
+    TEMP=$(echo "scale=6; $TEMP + $TEMP_POWER" | bc)
 
 done < $filename
 
-TEMP=$(echo "scale=3; $TEMP / $n" | bc)
-SD=$(echo "scale=3; sqrt($TEMP)" | bc)
+TEMP=$(echo "scale=6; $TEMP / $n" | bc)
+SD=$(echo "scale=6; sqrt($TEMP)" | bc)
 
 echo "SD: $SD"
+echo "SD: $SD" >> "$LAB_NAME-mathstat.txt"
 
 

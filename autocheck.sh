@@ -11,7 +11,7 @@ if [ -f "result$LAB_NAME.txt" ]; then
     rm "result$LAB_NAME.txt" # or delete file
 fi
 
-id=0
+id=0 # 63011 XXX
 for id in {0..999}; do # last 3 digits of ID number
 
     # set Full ID

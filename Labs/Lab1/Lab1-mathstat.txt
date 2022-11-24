@@ -1,3 +1,3 @@
-MAX: 6, MIN: 2
-Average: 3.666666
-SD: 1.699672
+MAX: 5, MIN: 3
+Average: 4.000000
+SD: .816496

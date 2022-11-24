@@ -36,6 +36,7 @@ if [ -f "$LAB_NAME-totalscore.txt" ]; then
     rm "$LAB_NAME-totalscore.txt"
 fi
 
+# delete file if mathstat file already exists
 if [ -f "$LAB_NAME-mathstat.txt" ]; then
     rm "$LAB_NAME-mathstat.txt"
 fi
@@ -48,7 +49,7 @@ for num in {1..9}; do
         while read line; do
             ID=${line:0:8}
             SCORE=${line:9}
-            echo "$SCORE" >> "$LAB_NAME-$ID.txt"
+            echo "$SCORE" >> "$LAB_NAME-$ID.txt" # Lab1-63011208.txt
         done < $filename
 
     fi
@@ -75,7 +76,7 @@ for id in {0..999}; do
             SCORE=$((SCORE+line))
         done < $filename
 
-        echo "$FULL_ID;$SCORE" >> "$LAB_NAME-totalscore.txt"
+        echo "$FULL_ID;$SCORE" >> "$LAB_NAME-totalscore.txt" # total score
     fi
 done
 
